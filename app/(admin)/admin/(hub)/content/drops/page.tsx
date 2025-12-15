@@ -21,7 +21,7 @@ export default function AdminDropsPage() {
 
         <button
           onClick={() => openModal("create-drop")}
-          className="flex items-center gap-2 px-3 py-2 text-sm bg-pink-500 text-black rounded">
+          className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm bg-pink-500 text-black rounded">
           <Plus size={14} />
           New Drop
         </button>

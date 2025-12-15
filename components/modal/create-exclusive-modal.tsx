@@ -1,7 +1,8 @@
 "use client"
 
-import { useAdminExclusivesStore } from "@/stores/admin/admin-exclusives-store"
 import { useState } from "react"
+import BaseModal from "./base-modal"
+import { useAdminExclusivesStore } from "@/stores/admin/admin-exclusives-store"
 
 export default function CreateExclusiveModal({
   onClose,
@@ -14,51 +15,72 @@ export default function CreateExclusiveModal({
   const [description, setDescription] = useState("")
   const [accessLevel, setAccessLevel] = useState("Members Only")
 
+  const isDisabled = !title.trim()
+
   return (
-    <div className="w-full max-w-md bg-gray-950 border border-gray-800 p-6 space-y-4">
-      <h2 className="text-lg font-semibold">New Exclusive Content</h2>
+    <BaseModal
+      title="New Exclusive Content"
+      onClose={onClose}
+      footer={
+        <div className="flex justify-end gap-3">
+          <button onClick={onClose} className="btn-secondary px-4 py-2">
+            Cancel
+          </button>
+          <button
+            disabled={isDisabled}
+            onClick={() => {
+              create({
+                title: title.trim(),
+                description: description.trim(),
+                accessLevel: accessLevel.trim(),
+                active: true,
+              })
+              onClose()
+            }}
+            className={`btn-primary px-4 py-2 ${
+              isDisabled ? "opacity-50 cursor-not-allowed" : ""
+            }`}>
+            Create Exclusive
+          </button>
+        </div>
+      }>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-400">
+            Content Title
+          </label>
+          <input
+            className="modal-input"
+            placeholder="e.g. Behind the Scenes Video"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+        </div>
 
-      <input
-        className="w-full bg-black border border-gray-700 px-3 py-2 text-sm"
-        placeholder="Content title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-400">
+            Description
+          </label>
+          <textarea
+            className="modal-input h-24 resize-none"
+            placeholder="Describe the exclusive content"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+        </div>
 
-      <textarea
-        className="w-full bg-black border border-gray-700 px-3 py-2 text-sm"
-        placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-
-      <input
-        className="w-full bg-black border border-gray-700 px-3 py-2 text-sm"
-        placeholder="Access level (e.g. Tier 2 Members)"
-        value={accessLevel}
-        onChange={(e) => setAccessLevel(e.target.value)}
-      />
-
-      <div className="flex justify-end gap-2 pt-2">
-        <button
-          onClick={onClose}
-          className="px-3 py-2 text-xs border border-gray-700">
-          Cancel
-        </button>
-        <button
-          onClick={() => {
-            create({
-              title,
-              description,
-              accessLevel,
-              active: true,
-            })
-            onClose()
-          }}
-          className="px-3 py-2 text-xs bg-pink-500 text-black">
-          Create Exclusive
-        </button>
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-400">
+            Access Level
+          </label>
+          <input
+            className="modal-input"
+            placeholder="e.g. Tier 2 Members"
+            value={accessLevel}
+            onChange={(e) => setAccessLevel(e.target.value)}
+          />
+        </div>
       </div>
-    </div>
+    </BaseModal>
   )
 }
