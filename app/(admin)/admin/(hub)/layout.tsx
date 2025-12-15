@@ -1,16 +1,11 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import Link from "next/link"
-import { LayoutDashboard, BarChart3, DollarSign, LogOut } from "lucide-react"
-import { useAdminStore } from "@/stores/admin-store"
-
-const nav = [
-  { label: "Overview", href: "/admin/overview", icon: LayoutDashboard },
-  { label: "Analytics", href: "/admin/analytics", icon: BarChart3 },
-  { label: "Finances", href: "/admin/finances", icon: DollarSign },
-]
+import { Menu, X, LogOut } from "lucide-react"
+import Nav from "@/components/nav"
+import { adminNavItems } from "@/lib/nav/admin-nav"
+import { useAdminStore } from "@/stores/admin/admin-store"
 
 export default function CreatorHubLayout({
   children,
@@ -19,9 +14,11 @@ export default function CreatorHubLayout({
 }) {
   const router = useRouter()
   const pathname = usePathname()
-  const { isAdmin, isExiting, finishExit, logout } = useAdminStore()
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const { isAdmin, logout, isExiting, finishExit } = useAdminStore()
 
   useEffect(() => {
+    // Block accidental admin access
     if (!isAdmin && !isExiting && pathname.startsWith("/admin")) {
       router.replace("/admin")
     }
@@ -35,35 +32,14 @@ export default function CreatorHubLayout({
   if (!isAdmin) return null
 
   return (
-    <div className="flex h-screen bg-black text-gray-100">
-      <aside className="w-64 flex flex-col border-r border-gray-800 bg-gray-950">
-        <div className="px-4 py-4 font-bold tracking-wide text-green-400">
-          CREATOR HUB
-        </div>
+    <div className="h-screen flex bg-black text-gray-100 overflow-hidden">
+      {/* Desktop Sidebar */}
+      <aside className="hidden md:flex w-64 flex-col border-r border-gray-800 bg-gray-950 overflow-hidden">
+        <div className="px-4 py-4 font-bold text-pink-400">CREATOR HUB</div>
 
-        <nav className="px-2 space-y-1">
-          {nav.map(({ label, href, icon: Icon }) => {
-            const active = pathname === href
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`
-                  flex items-center gap-3 px-3 py-2 text-sm
-                  ${
-                    active
-                      ? "bg-gray-900 text-green-400"
-                      : "text-gray-300 hover:bg-gray-900"
-                  }
-                `}>
-                <Icon size={16} />
-                {label}
-              </Link>
-            )
-          })}
-        </nav>
+        <Nav items={adminNavItems} />
 
-        <div className="mt-auto p-3">
+        <div className="p-3 mt-auto">
           <button
             onClick={() => {
               logout()
@@ -75,7 +51,6 @@ export default function CreatorHubLayout({
               border border-gray-700
               text-gray-300
               hover:bg-gray-900
-              transition cursor-pointer
             ">
             <LogOut size={14} />
             Exit Creator Hub
@@ -83,7 +58,66 @@ export default function CreatorHubLayout({
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto p-6">{children}</main>
+      {/* Mobile Header */}
+      <header className="md:hidden fixed top-0 left-0 right-0 z-40 h-14 flex items-center justify-between px-4 border-b border-gray-800 bg-gray-950">
+        <span className="font-bold text-pink-400">CREATOR HUB</span>
+        <button onClick={() => setMobileOpen(true)}>
+          <Menu size={20} />
+        </button>
+      </header>
+
+      {/* Mobile Drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 flex md:hidden">
+          {/* Drawer */}
+          <div className="w-64 bg-gray-950 border-r border-gray-800 overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 py-4">
+              <span className="font-bold text-pink-400">CREATOR HUB</span>
+              <button onClick={() => setMobileOpen(false)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Nav */}
+            <Nav
+              items={adminNavItems}
+              onNavigate={() => setMobileOpen(false)}
+            />
+
+            {/* Exit Button (Pinned Bottom) */}
+            <div className="mt-auto p-3">
+              <button
+                onClick={() => {
+                  logout()
+                  setMobileOpen(false)
+                  router.push("/dashboard")
+                }}
+                className="
+            w-full flex items-center gap-2
+            px-3 py-2 text-xs
+            border border-gray-700
+            text-gray-300
+            hover:bg-gray-900
+          ">
+                <LogOut size={14} />
+                Exit Creator Hub
+              </button>
+            </div>
+          </div>
+
+          {/* Overlay */}
+          <div
+            className="flex-1 bg-black/70"
+            onClick={() => setMobileOpen(false)}
+          />
+        </div>
+      )}
+
+      {/* Content */}
+      <main className="flex-1 overflow-y-auto pt-14 md:pt-0 p-6">
+        <div className="pt-10">{children}</div>
+      </main>
     </div>
   )
 }

@@ -23,7 +23,7 @@ export const useAdminStore = create<AdminState>((set) => ({
   logout: () =>
     set({
       isAdmin: false,
-      isExiting: true,
+      isExiting: true, // 👈 critical
     }),
 
   finishExit: () =>

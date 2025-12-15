@@ -22,7 +22,7 @@ export default function StatWidget({
 
       <p className="text-2xl font-semibold">{value}</p>
 
-      {delta && <p className="text-xs text-green-400">{delta}</p>}
+      {delta && <p className="text-xs text-pink-400">{delta}</p>}
     </div>
   )
 }

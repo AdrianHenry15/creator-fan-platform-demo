@@ -5,19 +5,27 @@ export type Track = {
   title: string
   audioUrl: string
   duration: string
-  imageUrl: string
+  imageUrl?: string
 }
 
 type PlayerState = {
   currentTrack: Track | null
   isPlaying: boolean
-  play: (track: Track) => void
+  playTrack: (track: Track) => void
+  play: () => void
   pause: () => void
 }
 
 export const usePlayerStore = create<PlayerState>((set) => ({
   currentTrack: null,
   isPlaying: false,
-  play: (track) => set({ currentTrack: track, isPlaying: true }),
+
+  playTrack: (track) =>
+    set({
+      currentTrack: track,
+      isPlaying: true,
+    }),
+
+  play: () => set({ isPlaying: true }),
   pause: () => set({ isPlaying: false }),
 }))

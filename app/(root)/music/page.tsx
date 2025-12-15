@@ -5,9 +5,10 @@ import { demoTracks } from "@/lib/mock-data"
 import { usePlayerStore } from "@/stores/player-store"
 import { useProgressionStore } from "@/stores/progression-store"
 import { Play, Pause, Lock } from "lucide-react"
+import Link from "next/link"
 
 export default function MusicPage() {
-  const { play, pause, currentTrack, isPlaying } = usePlayerStore()
+  const { playTrack, pause, currentTrack, isPlaying } = usePlayerStore()
   const { achievements } = useProgressionStore()
 
   const supporterUnlocked = achievements.find(
@@ -42,12 +43,12 @@ export default function MusicPage() {
               className={`
                 relative border border-gray-800 bg-gray-950
                 transition
-                ${locked ? "opacity-60" : "hover:border-green-500"}
+                ${locked ? "opacity-60" : "hover:border-pink-500"}
               `}>
               {/* Cover Art */}
               <div className="relative w-full aspect-square overflow-hidden">
                 <Image
-                  src={track.imageUrl}
+                  src={track.imageUrl || ""}
                   alt={track.title}
                   fill
                   className="object-cover"
@@ -75,19 +76,25 @@ export default function MusicPage() {
                 {/* Controls */}
                 <button
                   disabled={locked}
-                  onClick={() => (isActive ? pause() : play(track))}
-                  className={`
-                    w-full flex items-center justify-center gap-2
-                    px-3 py-2 text-sm font-medium
-                    border transition
-                    ${
-                      locked
-                        ? "border-gray-700 text-gray-500 cursor-not-allowed"
-                        : isActive
-                        ? "bg-green-600 border-green-600 text-black"
-                        : "border-gray-700 hover:border-green-500 hover:text-green-400"
+                  onClick={() => {
+                    if (isActive) {
+                      pause()
+                    } else {
+                      playTrack(track)
                     }
-                  `}>
+                  }}
+                  className={`
+    w-full flex items-center justify-center gap-2
+    px-3 py-2 text-sm font-medium
+    border transition
+    ${
+      locked
+        ? "border-gray-700 text-gray-500 cursor-not-allowed"
+        : isActive
+        ? "bg-pink-600 border-pink-600 text-black"
+        : "border-gray-700 hover:border-pink-500 hover:text-pink-400"
+    }
+  `}>
                   {isActive ? <Pause size={14} /> : <Play size={14} />}
                   {isActive ? "Pause" : "Play"}
                 </button>
@@ -103,7 +110,7 @@ export default function MusicPage() {
       {!supporterUnlocked && (
         <section className="border border-gray-800 bg-gray-950 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <p className="font-medium text-green-400">
+            <p className="font-medium text-pink-400">
               Locked content available
             </p>
             <p className="text-sm text-gray-400">
@@ -111,17 +118,17 @@ export default function MusicPage() {
             </p>
           </div>
 
-          <a
+          <Link
             href="/donate"
             className="
               inline-flex items-center justify-center
               px-5 py-2 text-sm font-medium
-              border border-green-500 text-green-400
-              hover:bg-green-500 hover:text-black
+              border border-pink-500 text-pink-400
+              hover:bg-pink-500 hover:text-black
               transition
             ">
             Unlock Content
-          </a>
+          </Link>
         </section>
       )}
     </div>

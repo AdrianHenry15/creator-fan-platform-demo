@@ -71,7 +71,7 @@ export default function MembersPage() {
               className={`
                 relative border border-gray-800 bg-gray-950 p-6
                 flex flex-col justify-between
-                ${unlocked ? "border-green-500" : "hover:border-gray-600"}
+                ${unlocked ? "border-pink-500" : "hover:border-gray-600"}
               `}>
               {/* Tier Header */}
               <div className="space-y-2">
@@ -79,7 +79,7 @@ export default function MembersPage() {
                   <h2 className="text-xl font-semibold">{tier.name}</h2>
 
                   {unlocked ? (
-                    <span className="flex items-center gap-1 text-green-400 text-sm">
+                    <span className="flex items-center gap-1 text-pink-400 text-sm">
                       <Check size={14} />
                       Active
                     </span>
@@ -99,7 +99,7 @@ export default function MembersPage() {
                   <li
                     key={perk}
                     className="flex items-start gap-2 text-gray-300">
-                    <Check size={14} className="text-green-400 mt-0.5" />
+                    <Check size={14} className="text-pink-400 mt-0.5" />
                     {perk}
                   </li>
                 ))}
@@ -112,7 +112,7 @@ export default function MembersPage() {
                     disabled
                     className="
                       w-full py-2 text-sm font-medium
-                      border border-green-500 text-green-400
+                      border border-pink-500 text-pink-400
                       cursor-default
                     ">
                     Membership Active
@@ -121,8 +121,8 @@ export default function MembersPage() {
                   <button
                     className="
                       w-full py-2 text-sm font-medium
-                      border border-green-500 text-green-400
-                      hover:bg-green-500 hover:text-black
+                      border border-pink-500 text-pink-400
+                      hover:bg-pink-500 hover:text-black
                       transition
                     ">
                     Join Supporter

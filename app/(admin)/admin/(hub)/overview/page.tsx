@@ -61,7 +61,7 @@ function Stat({
     <div className="border border-gray-800 bg-gray-950 p-4 space-y-1">
       <p className="text-xs text-gray-400">{label}</p>
       <p className="text-2xl font-semibold">{value}</p>
-      {sub && <p className="text-xs text-green-400">{sub}</p>}
+      {sub && <p className="text-xs text-pink-400">{sub}</p>}
     </div>
   )
 }

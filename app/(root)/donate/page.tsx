@@ -82,7 +82,7 @@ export default function DonatePage() {
 
       {/* Rewards Feedback */}
       {hasDonated && (
-        <section className="rounded-xl border border-green-500 bg-green-50 dark:bg-green-950 p-6 space-y-4">
+        <section className="rounded-xl border border-pink-500 bg-pink-50 dark:bg-pink-950 p-6 space-y-4">
           <div className="flex items-center gap-2 font-medium">
             <Sparkles size={18} />
             Thank you for supporting the artist!

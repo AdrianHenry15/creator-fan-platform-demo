@@ -47,7 +47,7 @@ export default function AchievementsPage() {
                 transition
                 ${
                   isUnlocked
-                    ? "border-green-500 bg-green-50 dark:bg-green-950"
+                    ? "border-pink-500 bg-pink-50 dark:bg-pink-950"
                     : "border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950"
                 }
               `}>
@@ -58,7 +58,7 @@ export default function AchievementsPage() {
                   w-10 h-10 rounded-full
                   ${
                     isUnlocked
-                      ? "bg-green-600 text-white"
+                      ? "bg-pink-600 text-white"
                       : "bg-gray-200 dark:bg-gray-800 text-gray-500"
                   }
                 `}>
@@ -86,7 +86,7 @@ export default function AchievementsPage() {
               {/* Status */}
               <div className="mt-4 text-xs font-medium uppercase tracking-wide">
                 {isUnlocked ? (
-                  <span className="text-green-600 dark:text-green-400">
+                  <span className="text-pink-600 dark:text-pink-400">
                     Unlocked
                   </span>
                 ) : (
