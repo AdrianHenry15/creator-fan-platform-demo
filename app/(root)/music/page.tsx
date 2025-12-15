@@ -1,0 +1,129 @@
+"use client"
+
+import Image from "next/image"
+import { demoTracks } from "@/lib/mock-data"
+import { usePlayerStore } from "@/stores/player-store"
+import { useProgressionStore } from "@/stores/progression-store"
+import { Play, Pause, Lock } from "lucide-react"
+
+export default function MusicPage() {
+  const { play, pause, currentTrack, isPlaying } = usePlayerStore()
+  const { achievements } = useProgressionStore()
+
+  const supporterUnlocked = achievements.find(
+    (a) => a.id === "supporter"
+  )?.unlocked
+
+  return (
+    <div className="space-y-8 max-w-5xl">
+      {/* ===================== */}
+      {/* Header */}
+      {/* ===================== */}
+      <header className="space-y-1">
+        <h1 className="text-3xl font-bold tracking-tight">Music</h1>
+        <p className="text-gray-400 text-sm">
+          Play tracks, unlock drops, and earn progression
+        </p>
+      </header>
+
+      {/* ===================== */}
+      {/* Track Grid */}
+      {/* ===================== */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {demoTracks.map((track, index) => {
+          const isActive = currentTrack?.id === track.id && isPlaying
+
+          // Demo rule: lock last track unless supporter
+          const locked = !supporterUnlocked && index === demoTracks.length - 1
+
+          return (
+            <div
+              key={track.id}
+              className={`
+                relative border border-gray-800 bg-gray-950
+                transition
+                ${locked ? "opacity-60" : "hover:border-green-500"}
+              `}>
+              {/* Cover Art */}
+              <div className="relative w-full aspect-square overflow-hidden">
+                <Image
+                  src={track.imageUrl}
+                  alt={track.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  priority={index === 0}
+                />
+
+                {locked && (
+                  <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+                    <div className="flex items-center gap-2 text-sm text-gray-200">
+                      <Lock size={16} />
+                      Supporter Required
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="p-4 space-y-3">
+                <div className="space-y-1">
+                  <p className="font-medium truncate">{track.title}</p>
+                  <p className="text-xs text-gray-400">{track.duration}</p>
+                </div>
+
+                {/* Controls */}
+                <button
+                  disabled={locked}
+                  onClick={() => (isActive ? pause() : play(track))}
+                  className={`
+                    w-full flex items-center justify-center gap-2
+                    px-3 py-2 text-sm font-medium
+                    border transition
+                    ${
+                      locked
+                        ? "border-gray-700 text-gray-500 cursor-not-allowed"
+                        : isActive
+                        ? "bg-green-600 border-green-600 text-black"
+                        : "border-gray-700 hover:border-green-500 hover:text-green-400"
+                    }
+                  `}>
+                  {isActive ? <Pause size={14} /> : <Play size={14} />}
+                  {isActive ? "Pause" : "Play"}
+                </button>
+              </div>
+            </div>
+          )
+        })}
+      </section>
+
+      {/* ===================== */}
+      {/* Unlock CTA */}
+      {/* ===================== */}
+      {!supporterUnlocked && (
+        <section className="border border-gray-800 bg-gray-950 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <p className="font-medium text-green-400">
+              Locked content available
+            </p>
+            <p className="text-sm text-gray-400">
+              Support the artist to unlock exclusive tracks and drops.
+            </p>
+          </div>
+
+          <a
+            href="/donate"
+            className="
+              inline-flex items-center justify-center
+              px-5 py-2 text-sm font-medium
+              border border-green-500 text-green-400
+              hover:bg-green-500 hover:text-black
+              transition
+            ">
+            Unlock Content
+          </a>
+        </section>
+      )}
+    </div>
+  )
+}
