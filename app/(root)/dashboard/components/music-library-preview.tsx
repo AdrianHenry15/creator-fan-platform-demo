@@ -2,7 +2,7 @@ import { demoTracks } from "@/lib/mock-data"
 import { usePlayerStore } from "@/stores/player-store"
 
 const MusicLibraryPreview = () => {
-  const { currentTrack, play } = usePlayerStore()
+  const { currentTrack, playTrack } = usePlayerStore()
 
   // Simple demo leveling logic
   return (
@@ -37,7 +37,7 @@ const MusicLibraryPreview = () => {
             </div>
 
             <button
-              onClick={() => play(track)}
+              onClick={() => playTrack(track)}
               className="
             shrink-0 rounded-md px-3 py-1 text-xs font-medium
             border border-gray-300 dark:border-gray-700
