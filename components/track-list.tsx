@@ -6,7 +6,7 @@ import { usePlayerStore } from "@/stores/player-store"
 import { Play, Pause } from "lucide-react"
 
 export default function TrackList() {
-  const { play, pause, currentTrack, isPlaying } = usePlayerStore()
+  const { playTrack, pause, currentTrack, isPlaying } = usePlayerStore()
 
   return (
     <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
@@ -27,7 +27,7 @@ export default function TrackList() {
               {/* Cover Art */}
               <div className="relative w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-md overflow-hidden">
                 <Image
-                  src={track.imageUrl}
+                  src={track.imageUrl || ""}
                   alt={track.title}
                   fill
                   sizes="(max-width: 640px) 48px, 56px"
@@ -55,7 +55,7 @@ export default function TrackList() {
 
               {/* Play / Pause Button */}
               <button
-                onClick={() => (isActive ? pause() : play(track))}
+                onClick={() => (isActive ? pause() : playTrack(track))}
                 className={`flex items-center justify-center shrink-0 w-10 h-10 sm:w-9 sm:h-9 rounded-full transition focus:outline-none focus:ring-2 focus:ring-blue-500 ${
                   isActive
                     ? "bg-blue-600 text-white hover:bg-blue-700"
